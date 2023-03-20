@@ -16,9 +16,9 @@ if (-not (funcFileExist(".\steamcmd\steamcmd.exe"))) {
     "1" = "Configurar SteamCMD"
     "2" = "Configurar parametros del Cluster"
     "3" = "Menú de instancias"
-    "5" = "Salir"
+    "4" = "Salir"
 }
-$defaultOption = "5"
+$defaultOption = "4"
 
 # Generación de objeto de la clase menú.
 $menu = [Menu]::new($options, $defaultOption)
@@ -41,15 +41,10 @@ do {
         }
         "3" {
             # Menú de instancias
-            $command = ".\RemoveOldestBackup.ps1"
+            $command = ".\steamcmd\instances\config.ps1"
             Invoke-Expression $command
-        }
-        "4" {
-            # Exit
-            Write-Host "Exiting..."
-            return
         }
         default {
         }
     }
-} while ($choice -ne "5")
+} while ($choice -ne "4")
