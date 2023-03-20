@@ -1,13 +1,5 @@
 
-# Validar la existencia de la carpeta y sus archivos
-if (-not (Test-Path -Path ".\steamcmd" -PathType Container)) {
-    New-Item -ItemType Directory -Path ".\steamcmd" | Out-Null
-}
-if (-not (Test-Path -Path ".\steamcmd\steamcmd.exe" -PathType Leaf)) {
-    Invoke-WebRequest "https://steamcdn-a.akamaihd.net/client/installer/steamcmd.zip" -OutFile ".\steamcmd\steamcmd.zip"
-    Expand-Archive -Path ".\steamcmd\steamcmd.zip" -DestinationPath ".\steamcmd"
-    Remove-Item -Path ".\steamcmd\steamcmd.zip"
-}
+# Validar la existencia del archivo de configuración.
 $userFile = ".\steamcmd\ark-ps-script.ini"
 if (-not (Test-Path -Path $userFile -PathType Leaf)) {
     "USUARIO=anonymous" | Set-Content -Path $userFile -Encoding UTF8

@@ -1,13 +1,26 @@
 # Import the Menu class from Menu.ps1
 . ".\lib\menu.ps1"
+. ".\lib\utilities.ps1"
 
+# Validación de carpeta steamcmd y el ejecutable steamcmd.exe.
+metPathExistOrCreate(".\steamcmd\instances")
+
+if (-not (funcFileExist(".\steamcmd\steamcmd.exe"))) {
+    Invoke-WebRequest "https://steamcdn-a.akamaihd.net/client/installer/steamcmd.zip" -OutFile ".\steamcmd\steamcmd.zip"
+    Expand-Archive -Path ".\steamcmd\steamcmd.zip" -DestinationPath ".\steamcmd"
+    Remove-Item -Path ".\steamcmd\steamcmd.zip"
+}
+
+# Creación de opciones del menú.
 [hashtable]$options = [ordered]@{
     "1" = "Configurar SteamCMD"
     "2" = "Configurar parametros del Cluster"
     "3" = "Menú de instancias"
     "5" = "Salir"
 }
-$defaultOption = "0"
+$defaultOption = "5"
+
+# Generación de objeto de la clase menú.
 $menu = [Menu]::new($options, $defaultOption)
 
 do {
@@ -18,16 +31,16 @@ do {
     # Execute the selected option
     switch ($choice) {
         "1" {
-            # Create a backup of a custom folder
+            # Se llama al menú de configuración de SteamCMD
             $command = ".\lib\steam\config.ps1"
             Invoke-Expression $command
         }
         "2" {
-            # Backup OneDrive Documents
-            $command = ".\lib\steam\instances.ps1"
+            # Configuración de los parametros del Cluster
+            $command = ".\lib\cluster\config.ps1"
         }
         "3" {
-            # Remove oldest backup
+            # Menú de instancias
             $command = ".\RemoveOldestBackup.ps1"
             Invoke-Expression $command
         }
@@ -37,7 +50,6 @@ do {
             return
         }
         default {
-            Write-Error "Invalid option: $choice"
         }
     }
-} while ($choice -ne "4")
+} while ($choice -ne "5")
